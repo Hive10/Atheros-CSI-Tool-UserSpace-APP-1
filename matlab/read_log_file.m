@@ -101,6 +101,7 @@ while cur < (len - 4)
 	fprintf('nr is %d  ',nr);
 
 	nc = fread(f, 1, 'uint8=>int');
+    nc = uint8(3);
 	csi_matrix.nc = nc;
 	cur = cur + 1;
 	fprintf('nc is %d\n',nc);
@@ -140,23 +141,22 @@ while cur < (len - 4)
     fprintf('payload length: %d\n',payload_len);	
     
     if csi_len > 0
-        csi_buf = fread(f, csi_len, 'uint8=>uint8');
-	    csi = read_csi(csi_buf, nr, nc, num_tones);
+        csi_buf2 = fread(f, csi_len, 'uint8=>uint8');
     	cur = cur + csi_len;
-	    csi_matrix.csi = csi;
     else
         csi_matrix.csi = 0;
     end       
     
     if payload_len > 0
-        data_buf = fread(f, payload_len, 'uint8=>uint8');	    
+        csi_buf1 = fread(f, payload_len, 'uint8=>uint8');	    
     	cur = cur + payload_len;
-	    csi_matrix.payload = data_buf;
     else
         csi_matrix.payload = 0;
     end
     
-    
+    csi_buf = vertcat(csi_buf1, csi_buf2);
+    csi = read_csi(csi_buf, nr, nc, num_tones);
+    csi_matrix.csi = csi;
     
     if (cur + 420 > len)
         break;
