@@ -45,6 +45,10 @@
  
 int main(int argc, char *argv[])
 {
+        char command[100];
+        strcpy( command, "echo 64 | tee -a /sys/kernel/debug/ieee80211/phy0/rc/fixed_rate_idx");
+        system(command);
+
 	int     sockfd;
     	int     i;
 	struct  ifreq if_idx;
